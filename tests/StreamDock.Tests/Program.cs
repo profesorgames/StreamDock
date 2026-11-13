@@ -71,6 +71,19 @@ static class Suite
                 await ThrowsAsync<OperationCanceledException>(() => service.DownloadAsync(new DownloadJob { Media = new("https://example.com/slow", "slow.bin", "test", MediaKind.File), Directory = Root }, new Progress<DownloadProgress>(), cts.Token));
                 Check(!Directory.EnumerateFiles(Root, "slow.bin", SearchOption.AllDirectories).Any());
             });
+            await Test("Signed file URL is recognized when the server rejects HEAD", async () =>
+            {
+                using var http = new HttpClient(new Handler(request =>
+                {
+                    if (request.Method == HttpMethod.Head) return new(HttpStatusCode.Forbidden);
+                    Check(request.Headers.Range?.Ranges.Single().To == 0);
+                    var response = new HttpResponseMessage(HttpStatusCode.PartialContent) { Content = new ByteArrayContent([42]) };
+                    response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+                    response.Content.Headers.ContentRange = new ContentRangeHeaderValue(0, 0, 4096); return response;
+                }));
+                var info = await Service(http, new FakeRunner()).AnalyzeAsync("https://example.com/image.png?signature=test", default);
+                Check(info.Kind == MediaKind.File && info.Size == 4096);
+            });
             await Test("Video extractor parses available resolutions and propagates quality cap", async () =>
             {
                 using var http = HtmlHttp();

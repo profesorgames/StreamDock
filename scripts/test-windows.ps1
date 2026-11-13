@@ -22,5 +22,5 @@ function Invoke-Check([string]$Mode, [string]$Report, [string]$Extra = '') {
 Invoke-Check '--self-test' 'native-self-test.json'
 $screenshot = Join-Path $Reports 'interface.png'
 Invoke-Check '--ui-smoke' 'ui-smoke.json' "--screenshot `"$screenshot`""
-Invoke-Check '--tray-smoke' 'tray-smoke.json'
+Invoke-Check '--tray --tray-smoke' 'tray-smoke.json'
 if (!(Test-Path $screenshot)) { throw 'UI screenshot is missing' }

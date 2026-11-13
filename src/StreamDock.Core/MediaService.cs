@@ -65,13 +65,24 @@ public sealed partial class MediaService(ToolPaths tools, AppSettings settings, 
         {
             using var request = new HttpRequestMessage(HttpMethod.Head, uri);
             using var response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct);
-            if (!response.IsSuccessStatusCode) return null;
-            var type = response.Content.Headers.ContentType?.MediaType ?? "";
-            if (type.Contains("html", StringComparison.OrdinalIgnoreCase) || type.Contains("json", StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(type)) return null;
-            var name = response.Content.Headers.ContentDisposition?.FileNameStar ?? response.Content.Headers.ContentDisposition?.FileName?.Trim('"') ?? Uri.UnescapeDataString(uri.Segments.LastOrDefault() ?? "download");
-            return new(uri.AbsoluteUri, Input.SafeName(name), uri.Host, MediaKind.File, Size: response.Content.Headers.ContentLength);
+            if (response.IsSuccessStatusCode) return FileInfoFromHeaders(uri, response);
+            // Signed download URLs can allow GET but reject HEAD. Read only headers
+            // of a ranged GET, without buffering a potentially large file.
+            using var fallback = new HttpRequestMessage(HttpMethod.Get, uri);
+            fallback.Headers.Range = new System.Net.Http.Headers.RangeHeaderValue(0, 0);
+            using var get = await http.SendAsync(fallback, HttpCompletionOption.ResponseHeadersRead, ct);
+            return get.IsSuccessStatusCode ? FileInfoFromHeaders(uri, get) : null;
         }
         catch (HttpRequestException) { return null; }
+    }
+
+    private static MediaInfo? FileInfoFromHeaders(Uri uri, HttpResponseMessage response)
+    {
+        var type = response.Content.Headers.ContentType?.MediaType ?? "";
+        var attachment = response.Content.Headers.ContentDisposition;
+        if (attachment is null && (type.Contains("html", StringComparison.OrdinalIgnoreCase) || type.Contains("json", StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(type))) return null;
+        var name = attachment?.FileNameStar ?? attachment?.FileName?.Trim('"') ?? Uri.UnescapeDataString(uri.Segments.LastOrDefault() ?? "download");
+        return new(uri.AbsoluteUri, Input.SafeName(name), uri.Host, MediaKind.File, Size: response.Content.Headers.ContentRange?.Length ?? response.Content.Headers.ContentLength);
     }
 
     private async Task<MediaInfo> AnalyzeGallery(Uri uri, CancellationToken ct)
