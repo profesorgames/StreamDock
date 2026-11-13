@@ -5,7 +5,7 @@
     <SolidColorBrush x:Key="LineBrush" Color="#2A3347"/>
     <SolidColorBrush x:Key="MutedBrush" Color="#9AA8BE"/>
     <SolidColorBrush x:Key="AccentBrush" Color="#71B4FF"/>
-    <Style TargetType="TextBlock"><Setter Property="Foreground" Value="#EDF2FC"/><Setter Property="FontFamily" Value="Segoe UI"/><Setter Property="FontSize" Value="14"/></Style>
+    <Style TargetType="TextBlock"><Setter Property="FontFamily" Value="Segoe UI"/><Setter Property="FontSize" Value="14"/></Style>
     <Style TargetType="Control"><Setter Property="FontFamily" Value="Segoe UI"/><Setter Property="FontSize" Value="14"/><Setter Property="Foreground" Value="#EDF2FC"/></Style>
     <Style TargetType="Button">
       <Setter Property="Background" Value="#27334A"/><Setter Property="Foreground" Value="#EDF2FC"/><Setter Property="Padding" Value="18,11"/><Setter Property="BorderThickness" Value="0"/><Setter Property="Cursor" Value="Hand"/>
@@ -25,7 +25,7 @@
     <Style x:Key="QuietButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}"><Setter Property="Background" Value="Transparent"/><Setter Property="Foreground" Value="#AABAD2"/><Setter Property="Padding" Value="10,8"/></Style>
     <Style TargetType="TextBox">
       <Setter Property="Foreground" Value="#EDF2FC"/><Setter Property="Background" Value="#111724"/><Setter Property="CaretBrush" Value="#91C5FF"/><Setter Property="BorderBrush" Value="#303D54"/><Setter Property="BorderThickness" Value="1"/><Setter Property="Padding" Value="14,12"/><Setter Property="VerticalContentAlignment" Value="Center"/><Setter Property="SelectionBrush" Value="#427CB5"/>
-      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="TextBox"><Border x:Name="Frame" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8"><ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/></Border><ControlTemplate.Triggers><Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Frame" Property="BorderBrush" Value="#76B7FF"/></Trigger><Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter>
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="TextBox"><Border x:Name="Frame" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8"><ScrollViewer x:Name="PART_ContentHost"/></Border><ControlTemplate.Triggers><Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Frame" Property="BorderBrush" Value="#76B7FF"/></Trigger><Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter>
     </Style>
     <Style TargetType="ComboBoxItem">
       <Setter Property="Foreground" Value="#EDF2FC"/><Setter Property="Padding" Value="12,9"/>
