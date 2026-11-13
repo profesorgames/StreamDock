@@ -24,7 +24,7 @@ public sealed partial class MediaService(ToolPaths tools, AppSettings settings, 
     }
     private List<string> GalleryArgs()
     {
-        var args = new List<string> { "-m", "gallery_dl", "--ignore-config", "--no-input", "--no-colors", "--retries", "3", "--timeout", "25" };
+        var args = new List<string> { "-X", "utf8", "-m", "gallery_dl", "--ignore-config", "--no-input", "--no-colors", "--retries", "3", "--timeout", "25" };
         if (!string.IsNullOrWhiteSpace(settings.CookiesFile)) args.AddRange(["--cookies", settings.CookiesFile]);
         return args;
     }

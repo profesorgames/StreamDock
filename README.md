@@ -6,7 +6,7 @@ Cloud; окончательная сборка и проверки Windows вы�
 
 ## Скачать и запустить
 
-Откройте [Releases](../../releases/latest), скачайте `StreamDock.exe` и запустите.
+Откройте [Releases](https://github.com/profesorgames/StreamDock/releases/latest), скачайте `StreamDock.exe` и запустите.
 Если релиза ещё нет: Actions → Windows portable EXE → успешный запуск →
 Artifacts → StreamDock-Windows-x64. Из архива нужен только EXE.
 
