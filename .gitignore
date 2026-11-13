@@ -1,0 +1,10 @@
+**/bin/
+**/obj/
+.vs/
+.payload-cache/
+payload/
+dist/
+artifacts/
+*.user
+*.log
+.env
